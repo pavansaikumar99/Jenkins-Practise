@@ -1,0 +1,32 @@
+pipeline {
+    agent any
+    
+    parameters {
+        choice(name: 'ACTION', choices: ['apply', 'destroy'], description: 'Terraform Action')
+    }
+
+    stages {
+        stage('git clone') {
+            steps {
+                git branch: 'main', url: 'https://github.com/pavansaikumar99/Terraform_CICD.git'
+            }
+        }
+        stage('tf init') {
+            steps {
+               sh 'terraform init'
+            }
+        }
+        
+        stage('tf plan') {
+            steps {
+               sh 'terraform plan'
+            }
+        }
+        
+        stage('tf apply') {
+            steps {
+               sh "terraform ${params.ACTION} -auto-approve"
+            }
+        }
+    }
+}
