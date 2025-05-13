@@ -30,3 +30,48 @@ pipeline {
         }
     }
 }
+
+
+############------changing directory------###############
+
+pipeline {
+    agent any
+    
+    parameters {
+        choice(name: 'ACTION', choices: ['apply', 'destroy'], description: 'Terraform Action')
+    }
+
+    stages {
+        stage('git clone') {
+            steps {
+                git branch: 'main', url: 'https://github.com/pavansaikumar99/Terraform1030-Practise.git'
+            }
+        }
+        stage('tf init') {
+            steps {
+               dir('Day04-create-s3bucket-for-backend') {
+                 sh 'terraform init'
+                } 
+            }
+        }
+        
+        stage('tf plan') {
+            steps {
+                dir('Day04-create-s3bucket-for-backend') {
+                 sh 'terraform plan'
+                } 
+               
+            }
+        }
+        
+        stage('tf apply') {
+            steps {
+                dir('Day04-create-s3bucket-for-backend') {
+                 sh "terraform ${params.ACTION} -auto-approve"
+                } 
+               
+            }
+        }
+    }
+}
+
