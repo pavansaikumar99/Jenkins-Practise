@@ -1,0 +1,13 @@
+pipeline {
+    agent {
+        label 'dev'
+    }
+
+    stages {
+        stage('gitclone') {
+            steps {
+               git branch: 'main', url: 'https://github.com/pavansaikumar99/Terraform1030-Practise.git'
+            }
+        }
+    }
+}
